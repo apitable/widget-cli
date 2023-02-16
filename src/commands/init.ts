@@ -121,8 +121,8 @@ your widget: my-widget is successfully created, cd my-widget/ check it out!
       globalPackageId: undefined,
       packageId,
       spaceId,
-      name: { 'en-US': nameCamelized },
-      description: { 'en-US': `${nameCamelized} description` },
+      name: { 'zh-CN': nameCamelized, 'en-US': nameCamelized },
+      description: { 'zh-CN': `${nameCamelized} 的描述`, 'en-US': `${nameCamelized} description` },
     };
     fse.writeFileSync(path.join(rootDir, Config.widgetConfigFileName), JSON.stringify(newWidgetConfig, null, 2));
 

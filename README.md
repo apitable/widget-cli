@@ -19,7 +19,7 @@ $ npm install -g @apitable/widget-cli
 $ widget-cli COMMAND
 running command...
 $ widget-cli (-v|--version|version)
-@apitable/widget-cli/0.0.1 darwin-x64 node-v16.15.0
+@apitable/widget-cli/0.0.2 darwin-x64 node-v16.15.0
 $ widget-cli --help [COMMAND]
 USAGE
   $ widget-cli COMMAND
@@ -28,18 +28,15 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-- [@apitable/widget-cli](#apitablewidget-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-  - [`widget-cli auth [TOKEN]`](#widget-cli-auth-token)
-  - [`widget-cli help [COMMAND]`](#widget-cli-help-command)
-  - [`widget-cli init`](#widget-cli-init)
-  - [`widget-cli list-release [PACKAGEID]`](#widget-cli-list-release-packageid)
-  - [`widget-cli release`](#widget-cli-release)
-  - [`widget-cli rollback [PACKAGEID] [VERSION]`](#widget-cli-rollback-packageid-version)
-  - [`widget-cli start`](#widget-cli-start)
-  - [`widget-cli submit`](#widget-cli-submit)
-  - [`widget-cli unpublish [PACKAGEID]`](#widget-cli-unpublish-packageid)
+* [`widget-cli auth [TOKEN]`](#widget-cli-auth-token)
+* [`widget-cli help [COMMAND]`](#widget-cli-help-command)
+* [`widget-cli init`](#widget-cli-init)
+* [`widget-cli list-release [PACKAGEID]`](#widget-cli-list-release-packageid)
+* [`widget-cli release`](#widget-cli-release)
+* [`widget-cli rollback [PACKAGEID] [VERSION]`](#widget-cli-rollback-packageid-version)
+* [`widget-cli start`](#widget-cli-start)
+* [`widget-cli submit`](#widget-cli-submit)
+* [`widget-cli unpublish [PACKAGEID]`](#widget-cli-unpublish-packageid)
 
 ## `widget-cli auth [TOKEN]`
 
@@ -60,7 +57,7 @@ EXAMPLE
   Succeed!
 ```
 
-_See code: [lib/commands/auth.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/auth.js)_
+_See code: [lib/commands/auth.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/auth.js)_
 
 ## `widget-cli help [COMMAND]`
 
@@ -100,7 +97,7 @@ EXAMPLE
   your widget: my-widget is successfully created, cd my-widget/ check it out!
 ```
 
-_See code: [lib/commands/init.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/init.js)_
+_See code: [lib/commands/init.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/init.js)_
 
 ## `widget-cli list-release [PACKAGEID]`
 
@@ -123,7 +120,7 @@ EXAMPLE
   Succeed!
 ```
 
-_See code: [lib/commands/list-release.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/list-release.js)_
+_See code: [lib/commands/list-release.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/list-release.js)_
 
 ## `widget-cli release`
 
@@ -144,7 +141,7 @@ EXAMPLE
   Succeed!
 ```
 
-_See code: [lib/commands/release.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/release.js)_
+_See code: [lib/commands/release.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/release.js)_
 
 ## `widget-cli rollback [PACKAGEID] [VERSION]`
 
@@ -168,7 +165,7 @@ EXAMPLE
   Succeed!
 ```
 
-_See code: [lib/commands/rollback.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/rollback.js)_
+_See code: [lib/commands/rollback.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/rollback.js)_
 
 ## `widget-cli start`
 
@@ -188,7 +185,7 @@ EXAMPLE
   Compiling...
 ```
 
-_See code: [lib/commands/start.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/start.js)_
+_See code: [lib/commands/start.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/start.js)_
 
 ## `widget-cli submit`
 
@@ -209,7 +206,7 @@ EXAMPLE
   Succeed!
 ```
 
-_See code: [lib/commands/submit.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/submit.js)_
+_See code: [lib/commands/submit.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/submit.js)_
 
 ## `widget-cli unpublish [PACKAGEID]`
 
@@ -233,5 +230,5 @@ EXAMPLE
   Succeed!
 ```
 
-_See code: [lib/commands/unpublish.js](https://github.com/apitable/widget-cli/blob/v0.0.1/lib/commands/unpublish.js)_
+_See code: [lib/commands/unpublish.js](https://github.com/apitable/widget-cli/blob/v0.0.2/lib/commands/unpublish.js)_
 <!-- commandsstop -->
