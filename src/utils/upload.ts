@@ -1,5 +1,7 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import * as fse from 'fs-extra';
+import * as mime from 'mime-types';
+
 import { IApiWrapper } from '../interface/api';
 import { IUploadAuth, IUploadAuthProps, IUploadMeta, IUploadNotifyProps, IUploadPackageProps } from '../interface/upload';
 
@@ -111,7 +113,11 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   });
   const allPromise: Promise<void>[] = [];
   files.forEach((file, i) => {
-    allPromise.push(uploadFile(file, uploadAuth[i]));
+    const ext = fileExtName?.[i];
+    const header = ext ? {
+      headers: { 'Content-Type': mime.lookup(ext) },
+    } : undefined;
+    allPromise.push(uploadFile(file, uploadAuth[i], header));
   });
   await Promise.all(allPromise);
   const tokenArray = uploadAuth.map(v => v.token);
