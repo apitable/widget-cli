@@ -27,9 +27,9 @@ interface IReleaseConfigAssets {
  */
 export const uploadPackageBundle = async(
   assets: IReleaseConfigAssets,
-  option: { packageId: string, version: string },
+  option: { packageId: string, version: string, uploadHost?: string },
   auth: { host: string, token: string }) => {
-  const { packageId, version } = option;
+  const { packageId, version, uploadHost } = option;
   const rootDir = findWidgetRootDir();
   const existFiles = Object.entries(assets).filter(([, value]) => Boolean(value));
   const files = existFiles.map(([key, value]) => ({
@@ -41,7 +41,8 @@ export const uploadPackageBundle = async(
     type: EFileType.PACKAGE,
     packageId,
     version,
-    fileExtName: files.map(v => v.extName)
+    fileExtName: files.map(v => v.extName),
+    uploadHost,
   }});
   cli.action.stop();
   const releaseCodeBundleTokenIndex = files.findIndex(v => v.name === 'releaseCodeBundle');
@@ -59,10 +60,10 @@ export const uploadPackageBundle = async(
  */
 export const uploadPackageAssets = async(
   assets: IReleasePackageAssets,
-  option: { packageId: string, version: string },
+  option: { packageId: string, version: string, uploadHost?: string },
   auth: { host: string, token: string }
 ) => {
-  const { packageId, version } = option;
+  const { packageId, version, uploadHost } = option;
   const rootDir = findWidgetRootDir();
   const existFiles = Object.entries(assets).filter(([, value]) => Boolean(value));
   const files = existFiles.map(([key, value]) => ({ name: key, entity: fse.createReadStream(path.join(rootDir, value)) }));
@@ -71,7 +72,8 @@ export const uploadPackageAssets = async(
   const tokenArray = await uploadPackage({ auth, files: filesEntity, opt: {
     type: EFileType.PACKAGE_CONFIG,
     packageId,
-    version
+    version,
+    uploadHost
   }});
   cli.action.stop();
   const iconTokenIndex = files.findIndex(v => v.name === 'icon');

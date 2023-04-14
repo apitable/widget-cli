@@ -47,5 +47,6 @@ export interface IUploadPackageProps {
     type: EFileType;
     version: string;
     fileExtName?: string[];
+    uploadHost?: string;
   }
 }

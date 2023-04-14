@@ -63,6 +63,9 @@ Succeed!
     openSource: flags.boolean({
       char: 'o', hidden: true, description: 'Upload and share source code with users, current used in example template',
     }),
+    uploadHost: flags.string({
+      char: 'u', description: 'Specifies the upload host of the server, such as https://apitable.com'
+    })
   };
 
   static args = [
@@ -353,7 +356,7 @@ Succeed!
 
   async run() {
     const parsed = this.parse(Release);
-    let { args: { packageId }, flags: { version, global: globalFlag, spaceId, openSource, host, token, ci }} = parsed;
+    let { args: { packageId }, flags: { version, global: globalFlag, spaceId, openSource, host, token, ci, uploadHost }} = parsed;
 
     // let { packageId, host, token } = await autoPrompt(parsed);
     packageId = this.getPackageId(packageId, globalFlag);
@@ -475,11 +478,11 @@ Succeed!
     await this.uploadAssets(AssetsType.Images, packageId, { host, token });
 
     const [releaseCodeBundleToken, sourceCodeBundleToken] = await uploadPackageBundle(
-      { releaseCodeBundle, sourceCodeBundle }, { version, packageId }, { host, token }
+      { releaseCodeBundle, sourceCodeBundle }, { version, packageId, uploadHost }, { host, token }
     );
 
     const [iconToken, coverToken, authorIconToken] = await uploadPackageAssets(
-      { icon, cover, authorIcon }, { version, packageId }, { host, token }
+      { icon, cover, authorIcon }, { version, packageId, uploadHost }, { host, token }
     );
 
     const data = {
