@@ -36,7 +36,7 @@ Succeed!
       char: 'o', hidden: true, description: 'Upload and share source code with users, current used in example template',
     }),
     uploadHost: flags.string({
-      char: 'u', description: 'Specifies the upload host of the server, such as https://apitable.com'
+      char: 'l', description: 'Specifies the upload host of the server, such as https://apitable.com'
     })
   };
 

@@ -122,9 +122,15 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   const allPromise: Promise<void>[] = [];
   files.forEach((file, i) => {
     const ext = fileExtName?.[i];
+    const contentLength = file.readableLength;
     const header = ext ? {
-      headers: { 'Content-Type': mime.lookup(ext) },
-    } : undefined;
+      headers: {
+         'Content-Type': mime.lookup(ext),
+         'Content-Length': contentLength
+      },
+    } : { 
+      headers: { 'Content-Length': contentLength }
+    };
     allPromise.push(uploadFile(file, uploadAuth[i], header, uploadHost));
   });
   await Promise.all(allPromise);
