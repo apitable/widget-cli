@@ -50,17 +50,25 @@ export const getUploadAuth = async({
   return result.data.data;
 };
 
+// 将 URL 的 origin 替换为新的 origin
+export const replaceOrigin = (url: string, newOrigin: string) => {
+  const urlObject = new URL(url);
+  urlObject.href = newOrigin + urlObject.pathname + urlObject.search + urlObject.hash;
+  return urlObject.toString();
+}
+
 /**
  * single file upload
  * @param file
  * @param uploadAuth
  * @param axiosConfig
  */
-export const uploadFile = async(file: fse.ReadStream, uploadAuth: IUploadAuth, axiosConfig?: AxiosRequestConfig | undefined) => {
+export const uploadFile = async(file: fse.ReadStream, uploadAuth: IUploadAuth, axiosConfig?: AxiosRequestConfig | undefined, uploadHost?: string) => {
   const { uploadRequestMethod, uploadUrl } = uploadAuth;
   const requestMethod = String(uploadRequestMethod).toLowerCase();
+  const finalUploadUrl = uploadHost ? replaceOrigin(uploadUrl, uploadHost) : uploadUrl;
   await axios({
-    url: uploadUrl,
+    url: finalUploadUrl,
     method: requestMethod as Method,
     data: file,
     ...axiosConfig,
@@ -100,7 +108,7 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   if (len > MAX_TOKEN_COUNT) {
     throw new Error('Maximum package config file limit exceeded');
   }
-  const { packageId, type, version, fileExtName } = opt;
+  const { packageId, type, version, fileExtName, uploadHost } = opt;
   const uploadAuth = await getUploadAuth({
     packageId,
     auth,
@@ -114,10 +122,16 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   const allPromise: Promise<void>[] = [];
   files.forEach((file, i) => {
     const ext = fileExtName?.[i];
+    const contentLength = file.readableLength;
     const header = ext ? {
-      headers: { 'Content-Type': mime.lookup(ext) },
-    } : undefined;
-    allPromise.push(uploadFile(file, uploadAuth[i], header));
+      headers: {
+         'Content-Type': mime.lookup(ext),
+         'Content-Length': contentLength
+      },
+    } : { 
+      headers: { 'Content-Length': contentLength }
+    };
+    allPromise.push(uploadFile(file, uploadAuth[i], header, uploadHost));
   });
   await Promise.all(allPromise);
   const tokenArray = uploadAuth.map(v => v.token);
