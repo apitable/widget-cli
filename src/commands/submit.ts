@@ -157,10 +157,10 @@ Succeed!
     await this.uploadAssets(AssetsType.Images, packageId, { host, token });
 
     const [iconToken, coverToken, authorIconToken] = await uploadPackageAssets(
-      { icon, cover, authorIcon }, { version, packageId, uploadHost }, { host, token }
+      { icon, cover, authorIcon }, { version, packageId, uploadHost, isSubmit: true }, { host, token }
     );
     const [releaseCodeBundleToken, sourceCodeBundleToken] = await uploadPackageBundle(
-      { releaseCodeBundle, sourceCodeBundle }, { version, packageId, uploadHost }, { host, token }
+      { releaseCodeBundle, sourceCodeBundle }, { version, packageId, uploadHost, isSubmit: true }, { host, token }
     );
 
     const data = {

@@ -48,5 +48,6 @@ export interface IUploadPackageProps {
     version: string;
     fileExtName?: string[];
     uploadHost?: string;
+    isSubmit?: boolean;
   }
 }

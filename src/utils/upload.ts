@@ -108,7 +108,7 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   if (len > MAX_TOKEN_COUNT) {
     throw new Error('Maximum package config file limit exceeded');
   }
-  const { packageId, type, version, fileExtName, uploadHost } = opt;
+  const { packageId, type, version, fileExtName, uploadHost, isSubmit } = opt;
   const uploadAuth = await getUploadAuth({
     packageId,
     auth,
@@ -123,14 +123,19 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   files.forEach((file, i) => {
     const ext = fileExtName?.[i];
     const contentLength = file.readableLength;
-    const header = ext ? {
-      headers: {
-         'Content-Type': mime.lookup(ext),
-         'Content-Length': contentLength
-      },
-    } : { 
-      headers: { 'Content-Length': contentLength }
-    };
+    let header;
+    if (isSubmit) {
+      header = ext ? { headers: { 'Content-Type': mime.lookup(ext) } } : undefined;
+    } else {
+      header = ext ? {
+        headers: {
+           'Content-Type': mime.lookup(ext),
+           'Content-Length': contentLength
+        },
+      } : { 
+        headers: { 'Content-Length': contentLength }
+      };
+    }
     allPromise.push(uploadFile(file, uploadAuth[i], header, uploadHost));
   });
   await Promise.all(allPromise);
