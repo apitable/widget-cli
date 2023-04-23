@@ -36,8 +36,13 @@ export interface IUploadNotifyProps {
   }
 }
 
+export interface IUploadFile {
+  size: number;
+  entity: fse.ReadStream;
+}
+
 export interface IUploadPackageProps {
-  files?: fse.ReadStream[];
+  files?: IUploadFile[];
   auth: {
     host: string;
     token: string

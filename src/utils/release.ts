@@ -1,6 +1,7 @@
 import cli from 'cli-ux';
 import * as path from 'path';
 import * as fse from 'fs-extra';
+import * as fs from 'fs';
 import * as semver from 'semver';
 import { findWidgetRootDir } from './root_dir';
 import { uploadPackage } from './upload';
@@ -32,12 +33,24 @@ export const uploadPackageBundle = async(
   const { packageId, version, uploadHost, isSubmit } = option;
   const rootDir = findWidgetRootDir();
   const existFiles = Object.entries(assets).filter(([, value]) => Boolean(value));
-  const files = existFiles.map(([key, value]) => ({
-    name: key, entity: fse.createReadStream(path.resolve(rootDir, value)), extName: path.extname(value)
-  }));
+  const files = [];
+
+  for (const [fileName, filePath] of existFiles) {
+    const size = (await fs.statSync(path.resolve(rootDir, filePath))).size;
+    files.push({
+      name: fileName, 
+      size,
+      entity: fse.createReadStream(path.resolve(rootDir, filePath)), 
+      extName: path.extname(filePath)
+    })
+  }
+
   cli.action.start('uploading bundle');
-  const filesEntity = files.map(v => v.entity);
-  const tokenArray = await uploadPackage({ auth, files: filesEntity, opt: {
+  const finalFiles = files.map(v => ({
+    size: v.size,
+    entity: v.entity
+  }));
+  const tokenArray = await uploadPackage({ auth, files: finalFiles, opt: {
     type: EFileType.PACKAGE,
     packageId,
     version,
@@ -67,10 +80,23 @@ export const uploadPackageAssets = async(
   const { packageId, version, uploadHost, isSubmit } = option;
   const rootDir = findWidgetRootDir();
   const existFiles = Object.entries(assets).filter(([, value]) => Boolean(value));
-  const files = existFiles.map(([key, value]) => ({ name: key, entity: fse.createReadStream(path.join(rootDir, value)) }));
+  const files = [];
+
+  for (const [fileName, filePath] of existFiles) {
+    const size = (await fs.statSync(path.resolve(rootDir, filePath))).size;
+    files.push({
+      name: fileName, 
+      size,
+      entity: fse.createReadStream(path.resolve(rootDir, filePath)), 
+    })
+  }
+
   cli.action.start('uploading package assets');
-  const filesEntity = files.map(v => v.entity);
-  const tokenArray = await uploadPackage({ auth, files: filesEntity, opt: {
+  const finalFiles = files.map(v => ({
+    size: v.size,
+    entity: v.entity
+  }));
+  const tokenArray = await uploadPackage({ auth, files: finalFiles, opt: {
     type: EFileType.PACKAGE_CONFIG,
     packageId,
     version,

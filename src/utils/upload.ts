@@ -122,7 +122,6 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
   const allPromise: Promise<void>[] = [];
   files.forEach((file, i) => {
     const ext = fileExtName?.[i];
-    const contentLength = file.readableLength;
     let header;
     if (isSubmit) {
       header = ext ? { headers: { 'Content-Type': mime.lookup(ext) } } : undefined;
@@ -130,13 +129,13 @@ export const uploadPackage = async({ auth, opt, files }: IUploadPackageProps) =>
       header = ext ? {
         headers: {
            'Content-Type': mime.lookup(ext),
-           'Content-Length': contentLength
+           'Content-Length': file.size
         },
       } : { 
-        headers: { 'Content-Length': contentLength }
+        headers: { 'Content-Length': file.size }
       };
     }
-    allPromise.push(uploadFile(file, uploadAuth[i], header, uploadHost));
+    allPromise.push(uploadFile(file.entity, uploadAuth[i], header, uploadHost));
   });
   await Promise.all(allPromise);
   const tokenArray = uploadAuth.map(v => v.token);
