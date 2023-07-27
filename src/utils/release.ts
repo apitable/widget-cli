@@ -87,7 +87,8 @@ export const uploadPackageAssets = async(
     files.push({
       name: fileName, 
       size,
-      entity: fse.createReadStream(path.resolve(rootDir, filePath)), 
+      extName: filePath.slice(filePath.lastIndexOf('.')),
+      entity: fse.createReadStream(path.resolve(rootDir, filePath)),
     })
   }
 
@@ -96,13 +97,16 @@ export const uploadPackageAssets = async(
     size: v.size,
     entity: v.entity
   }));
-  const tokenArray = await uploadPackage({ auth, files: finalFiles, opt: {
-    type: EFileType.PACKAGE_CONFIG,
-    packageId,
-    version,
-    uploadHost,
-    isSubmit
-  }});
+  const tokenArray = await uploadPackage({
+    auth, files: finalFiles, opt: {
+      type: EFileType.PACKAGE_CONFIG,
+      packageId,
+      fileExtName: files.map(v => v.extName),
+      version,
+      uploadHost,
+      isSubmit
+    }
+  });
   cli.action.stop();
   const iconTokenIndex = files.findIndex(v => v.name === 'icon');
   const coverTokenIndex = files.findIndex(v => v.name === 'cover');
