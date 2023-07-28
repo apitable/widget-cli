@@ -271,7 +271,7 @@ Succeed!
     };
   }
 
-  async uploadAssets(assetsType: AssetsType, packageId: string, auth: { host: string, token: string }) {
+  async uploadAssets(assetsType: AssetsType, packageId: string, auth: { host: string, token: string }, uploadHost?: string) {
     const widgetRootDir = findWidgetRootDir();
     const assetsDir = path.join(widgetRootDir, Config.releaseCodePath, Config.releaseAssets);
     const assetsTypeDir = path.join(assetsDir, assetsType);
@@ -308,11 +308,11 @@ Succeed!
       uploadAuth.forEach((auth, index) => {
         const fileUrl = path.join(widgetRootDir, Config.releaseCodePath, fileNames[index]);
         const fileEntity = fse.createReadStream(fileUrl);
-        allPromise.push(uploadFile(fileEntity, auth));
+        allPromise.push(uploadFile(fileEntity, auth, undefined, uploadHost));
         this.log(`uploading ${fileNames[index]}`);
       });
       await Promise.all(allPromise);
-      await uploadNotify({ auth, opt: { resourceKeys: uploadAuth.map(v => v.token) }});
+      await uploadNotify({ auth, opt: { resourceKeys: uploadAuth.map(v => v.token) } });
     }
     cli.action.stop();
   }
@@ -356,7 +356,7 @@ Succeed!
 
   async run() {
     const parsed = this.parse(Release);
-    let { args: { packageId }, flags: { version, global: globalFlag, spaceId, openSource, host, token, ci, uploadHost }} = parsed;
+    let { args: { packageId }, flags: { version, global: globalFlag, spaceId, openSource, host, token, ci, uploadHost } } = parsed;
 
     // let { packageId, host, token } = await autoPrompt(parsed);
     packageId = this.getPackageId(packageId, globalFlag);
@@ -475,7 +475,7 @@ Succeed!
     }
     this.log();
 
-    await this.uploadAssets(AssetsType.Images, packageId, { host, token });
+    await this.uploadAssets(AssetsType.Images, packageId, { host, token }, uploadHost);
 
     const [releaseCodeBundleToken, sourceCodeBundleToken] = await uploadPackageBundle(
       { releaseCodeBundle, sourceCodeBundle }, { version, packageId, uploadHost }, { host, token }
