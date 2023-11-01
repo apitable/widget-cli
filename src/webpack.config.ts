@@ -4,16 +4,18 @@ import Config from './config';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { getAssetsType, viaFileLoader } from './utils/file';
 import { IWebpackConfig } from './interface/webpack';
-import { getWidgetConfig } from './utils/project';
+import { getWidgetConfig, getWebpackCustomConfig } from './utils/project';
+const { merge } = require('webpack-merge');
 
 export const getWebpackConfig = (
   { dir, mode, globalFlag, config, onSucceed }:
   {dir: string; globalFlag: boolean | undefined, mode: 'dev' | 'prod'; config: IWebpackConfig; onSucceed: () => void}
 ): webpack.Configuration => {
   const widgetConfig = getWidgetConfig();
+  const webpackConfigFromJson = getWebpackCustomConfig() as webpack.Configuration ;
   const packageId = (globalFlag ? widgetConfig.globalPackageId : widgetConfig.packageId) || 'wpkDeveloper';
 
-  return {
+  const webpackConfig =  {
     context: path.resolve(__dirname),
     entry: {
       bundle: path.join(dir, config.entry),
@@ -145,4 +147,6 @@ export const getWebpackConfig = (
       new CleanWebpackPlugin()
     ],
   };
+  const result  = merge(webpackConfig, webpackConfigFromJson)
+  return result
 };
