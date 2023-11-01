@@ -1,7 +1,7 @@
 {
   "name": "@apitable/widget-cli",
   "description": "help you to build awesome apitable widget",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "author": "APITable PTE. LTD.",
   "bin": {
     "widget-cli": "./bin/run"

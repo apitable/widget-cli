@@ -16,13 +16,17 @@ export function getWidgetConfig(rootDir?: string): IWidgetConfig {
 
 export function getWebpackCustomConfig(rootDir?: string): any {
   rootDir = rootDir ?? findWidgetRootDir();
-  try {
-    const common = require(path.join(rootDir, Config.webpackConfigFileName));
-    return common;
-  } catch (e) {
-    console.error(e)
-    return {}
+  const checkExist = fse.existsSync(path.join(rootDir, Config.webpackConfigFileName))
+  if(checkExist) {
+    try {
+      const common = require(path.join(rootDir, Config.webpackConfigFileName));
+      return common;
+    } catch (e) {
+      console.error(e)
+      return {}
+    }
   }
+  return {}
 }
 
 export function getPackageJSON(rootDir?: string) {
