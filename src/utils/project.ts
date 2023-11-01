@@ -14,6 +14,17 @@ export function getWidgetConfig(rootDir?: string): IWidgetConfig {
   return JSON.parse(fse.readFileSync(path.join(rootDir, Config.widgetConfigFileName), 'utf8'));
 }
 
+export function getWebpackCustomConfig(rootDir?: string): any {
+  rootDir = rootDir ?? findWidgetRootDir();
+  try {
+    const common = require(path.join(rootDir, Config.webpackConfigFileName));
+    return common;
+  } catch (e) {
+    console.error(e)
+    return {}
+  }
+}
+
 export function getPackageJSON(rootDir?: string) {
   rootDir = rootDir ?? findWidgetRootDir();
   return require(path.join(rootDir, 'package.json'));
